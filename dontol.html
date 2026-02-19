@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kirim Lokasi</title>
+</head>
+<body>
+
+<button onclick="kirimLokasi()">Kirim Lokasi</button>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+  // INIT EMAILJS
+  emailjs.init("ckz9xLQObifMNK_Gsnmqz");
+
+  function kirimLokasi(){
+
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(function(position){
+
+        const lat = position.coords.latitude;
+        const long = position.coords.longitude;
+
+        emailjs.send("service_34h9p6c","template_5gakog5",{
+          latitude: lat,
+          longitude: long,
+          maps: "https://maps.google.com/?q=" + lat + "," + long
+        }).then(function(){
+          alert("Lokasi berhasil dikirim ke email!");
+        }, function(error){
+          alert("Gagal kirim: " + JSON.stringify(error));
+        });
+
+      }, function(){
+        alert("Lokasi tidak diizinkan");
+      });
+    } else {
+      alert("Browser tidak support geolocation");
+    }
+
+  }
+</script>
+
+</body>
+</html>

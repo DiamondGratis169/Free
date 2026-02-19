@@ -53,17 +53,6 @@ body{
 .circle img:nth-child(5){ transform: rotate(240deg) translate(120px) rotate(-240deg); }
 .circle img:nth-child(6){ transform: rotate(300deg) translate(120px) rotate(-300deg); }
 
-.pointer{
-    position:absolute;
-    width:4px;
-    height:140px;
-    background:#ff004c;
-    top:10px;
-    left:50%;
-    transform-origin:bottom center;
-    box-shadow:0 0 20px #ff004c;
-}
-
 /* LEDAKAN CAHAYA */
 .explosion{
     position:absolute;

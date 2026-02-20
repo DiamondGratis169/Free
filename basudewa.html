@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BasudewaStore</title>
 
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{
@@ -34,9 +36,13 @@ body.light nav{background:white;border-bottom:2px solid black;}
 .particle{position:absolute;width:10px;height:10px;background:orange;border-radius:50%;opacity:0.7;animation:particleMove 2s linear infinite;}
 @keyframes particleMove{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(-100px) rotate(360deg);opacity:0;}}
 
+/* THUMBNAIL FOTO KENANGAN */
+.thumbnails{display:flex;justify-content:center;gap:15px;margin:15px;}
+.thumbnail img{width:100px;height:70px;object-fit:cover;border-radius:5px;cursor:pointer;border:2px solid red;}
+
 /* PRODUCTS */
 .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:30px;}
-.card{background:#1a1a1a;padding:10px;border-radius:10px;text-align:center;transition:0.3s;}
+.card{background:#1a1a1a;padding:10px;border-radius:10px;text-align:center;transition:0.3s;cursor:pointer;}
 body.light .card{background:white;}
 .card:hover{transform:scale(1.05);}
 .card img{width:100%;height:250px;object-fit:cover;background:#333;}
@@ -51,6 +57,17 @@ body.light #cart{background:#eee;color:black;}
 .cart-btn{cursor:pointer;background:red;padding:5px 10px;}
 input,textarea{width:100%;padding:8px;margin:5px 0;}
 .toggle-mode{cursor:pointer;background:#444;padding:5px 10px;}
+
+/* MODAL POPUP */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:20;}
+.modal-content{background:#1a1a1a;padding:20px;border-radius:10px;width:300px;text-align:center;position:relative;}
+body.light .modal-content{background:white;color:black;}
+.modal img{width:100%;height:200px;object-fit:cover;margin-bottom:10px;}
+.close-btn{position:absolute;top:5px;right:10px;cursor:pointer;color:red;font-weight:bold;}
+.modal button{margin-top:10px;}
+
+/* FOOTER */
+footer{text-align:center;margin:20px 0;color:red;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -63,6 +80,13 @@ input,textarea{width:100%;padding:8px;margin:5px 0;}
 </div>
 </nav>
 
+<!-- THUMBNAIL FOTO KENANGAN -->
+<div class="thumbnails">
+<div class="thumbnail"><img src="ISI_FOTO_KENANGAN1.jpg" alt="Kenangan"></div>
+<div class="thumbnail"><img src="ISI_FOTO_KENANGAN2.jpg" alt="Kenangan"></div>
+<div class="thumbnail"><img src="ISI_FOTO_KENANGAN3.jpg" alt="Kenangan"></div>
+</div>
+
 <section class="hero">
 <div class="flare"></div>
 <div class="flare"></div>
@@ -72,48 +96,37 @@ input,textarea{width:100%;padding:8px;margin:5px 0;}
 </section>
 
 <section class="products">
-
-<!-- FOTO PRODUK BISA DIISI SENDIRI -->
-<div class="card">
+<div class="card" onclick="openModal('Jersey Home',199000,'ISI_FOTO_SENDIRI1.jpg','size1')">
 <img src="ISI_FOTO_SENDIRI1.jpg">
-<h3>Jersey Home</h3>
+<h3>Jersey</h3>
 <p>Rp199.000</p>
 <select id="size1">
-<option value="S">S</option>
-<option value="M">M</option>
-<option value="L">L</option>
-<option value="XL">XL</option>
+<option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
 </select>
-<button onclick="addToCart('Jersey Home',199000,'size1')">Tambah</button>
 </div>
 
-<div class="card">
+<div class="card" onclick="openModal('Hoodie Ultras',249000,'ISI_FOTO_SENDIRI2.jpg','size2')">
 <img src="ISI_FOTO_SENDIRI2.jpg">
-<h3>Hoodie Ultras</h3>
+<h3>Hoodie</h3>
 <p>Rp249.000</p>
 <select id="size2">
-<option value="S">S</option>
-<option value="M">M</option>
-<option value="L">L</option>
-<option value="XL">XL</option>
+<option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
 </select>
-<button onclick="addToCart('Hoodie Ultras',249000,'size2')">Tambah</button>
 </div>
-
-<!-- FOTO KENANGAN-DOANG -->
-<div class="card">
-<img src="ISI_FOTO_KENANGAN1.jpg">
-<h3>Foto Kenangan Tribun</h3>
-<p>Hanya Pajangan</p>
-</div>
-
-<div class="card">
-<img src="ISI_FOTO_KENANGAN2.jpg">
-<h3>Foto Ultras</h3>
-<p>Hanya Pajangan</p>
-</div>
-
 </section>
+
+<!-- MODAL POPUP -->
+<div id="modal" class="modal">
+<div class="modal-content">
+<span class="close-btn" onclick="closeModal()">×</span>
+<img id="modal-img" src="">
+<h3 id="modal-name"></h3>
+<p id="modal-price"></p>
+<p>Ukuran: <span id="modal-size"></span></p>
+<img src="ISI_FOTO_QRIS.jpg" alt="QRIS" style="width:100px;margin-top:5px;">
+<button onclick="checkoutModal()">Checkout</button>
+</div>
+</div>
 
 <div id="cart">
 <h3>Keranjang</h3>
@@ -127,10 +140,10 @@ input,textarea{width:100%;padding:8px;margin:5px 0;}
 
 <audio id="chant" src="https://www.myinstants.com/media/sounds/crowd-cheer.mp3" autoplay></audio>
 
-<script>
-let cart=[];
+<footer>© 2023 BasudewaStore - Official</footer>
 
-// particle api
+<script>
+// Particle api
 function createParticle(){
 let particle=document.createElement('div');
 particle.classList.add('particle');
@@ -141,29 +154,52 @@ setTimeout(()=>{particle.remove();},2000);
 }
 setInterval(createParticle,150);
 
-// cart functions
-function addToCart(nama,harga,sizeId){
-let size=document.getElementById(sizeId).value;
-cart.push({nama,harga,size});
-updateCart();
-document.getElementById("chant").play();
-}
-function updateCart(){
-let list="";let total=0;
-cart.forEach((item)=>{list+=`<p>${item.nama} (${item.size}) - Rp${item.harga}</p>`;total+=item.harga;});
-document.getElementById("cart-items").innerHTML=list+"<hr>Total: Rp"+total;
-document.getElementById("cart-count").innerText=cart.length;
-}
+// Cart
+let cart=[];
 function toggleCart(){document.getElementById("cart").classList.toggle("active");}
 function toggleMode(){document.body.classList.toggle("light");}
+
+function openModal(name,price,imgId,sizeId){
+document.getElementById("modal").style.display="flex";
+document.getElementById("modal-img").src=imgId;
+document.getElementById("modal-name").innerText=name;
+document.getElementById("modal-price").innerText="Rp"+price;
+document.getElementById("modal-size").innerText=document.getElementById(sizeId).value;
+}
+function closeModal(){document.getElementById("modal").style.display="none";}
+
+function checkoutModal(){
+let nama=document.getElementById("nama").value;
+let alamat=document.getElementById("alamat").value;
+let produk=document.getElementById("modal-name").innerText;
+let harga=document.getElementById("modal-price").innerText;
+let ukuran=document.getElementById("modal-size").innerText;
+
+if(nama==""||alamat==""){alert("Nama dan Alamat wajib diisi!");return;}
+
+// EmailJS (isi dengan settingmu)
+emailjs.init("Ab3xvPQCqJkB8Kh_V"); 
+emailjs.send("service_lt5tmzc","template_e16cgrw",{
+nama:nama,
+alamat:alamat,
+pesanan:produk+" - "+harga+" - Ukuran: "+ukuran,
+email_tujuan:"akunffsingapura54321@gmail.com"
+}).then(()=>{
+alert("Pesanan berhasil dikirim!");
+closeModal();
+});
+}
+
+// Checkout form bawah
 function checkout(){
 let nama=document.getElementById("nama").value;
 let alamat=document.getElementById("alamat").value;
 if(nama==""||alamat==""){alert("Nama dan Alamat wajib diisi!");return;}
 alert("Pesanan berhasil!\nTerima kasih "+nama);
-cart=[];updateCart();
+cart=[];document.getElementById("cart-items").innerHTML="";
+document.getElementById("cart-count").innerText=0;
 }
 </script>
 
 </body>
-</html>
+  </html>

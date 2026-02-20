@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BasudewaStore</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{
+background:#0a0a0a;color:white;overflow-x:hidden;transition:0.4s;
+}
+body.light{background:#f5f5f5;color:black;}
+
+/* NAV */
+nav{
+background:#111;padding:15px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid red;position:relative;z-index:5;
+}
+body.light nav{background:white;border-bottom:2px solid black;}
+.logo{color:red;font-weight:bold;font-size:22px;}
+
+/* HERO */
+.hero{height:60vh;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;}
+.flare{position:absolute;width:150px;height:150px;background:radial-gradient(circle, rgba(255,0,0,0.9), transparent 70%);border-radius:50%;animation:flareMove 4s infinite alternate ease-in-out;}
+.flare:nth-child(1){left:20%; top:30%;}
+.flare:nth-child(2){right:20%; top:40%; animation-delay:2s;}
+@keyframes flareMove{from{transform:scale(1) translateY(0);}to{transform:scale(1.3) translateY(-30px);}}
+
+/* SMOKE */
+.smoke{position:absolute;width:200%;height:200%;background:radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);animation:smokeMove 15s linear infinite;}
+@keyframes smokeMove{from{transform:translateX(-20%);}to{transform:translateX(20%);}}
+
+/* PARTICLE API */
+.particle{position:absolute;width:10px;height:10px;background:orange;border-radius:50%;opacity:0.7;animation:particleMove 2s linear infinite;}
+@keyframes particleMove{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(-100px) rotate(360deg);opacity:0;}}
+
+/* PRODUCTS */
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:30px;}
+.card{background:#1a1a1a;padding:10px;border-radius:10px;text-align:center;transition:0.3s;}
+body.light .card{background:white;}
+.card:hover{transform:scale(1.05);}
+.card img{width:100%;height:250px;object-fit:cover;background:#333;}
+select,button{margin-top:8px;padding:8px;border:none;cursor:pointer;}
+button{background:red;color:white;}
+button:hover{background:white;color:red;}
+
+/* CART SLIDE */
+#cart{position:fixed;right:-350px;top:0;width:300px;height:100%;background:#111;padding:20px;transition:0.4s;z-index:10;overflow-y:auto;}
+#cart.active{right:0;}
+body.light #cart{background:#eee;color:black;}
+.cart-btn{cursor:pointer;background:red;padding:5px 10px;}
+input,textarea{width:100%;padding:8px;margin:5px 0;}
+.toggle-mode{cursor:pointer;background:#444;padding:5px 10px;}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo">BasudewaStore</div>
+<div>
+<span class="toggle-mode" onclick="toggleMode()">🌙 Mode</span>
+<span class="cart-btn" onclick="toggleCart()">🛒 (<span id="cart-count">0</span>)</span>
+</div>
+</nav>
+
+<section class="hero">
+<div class="flare"></div>
+<div class="flare"></div>
+<div class="smoke"></div>
+<h1>ULTRAS STADIUM</h1>
+<p>Support Your Team With Pride</p>
+</section>
+
+<section class="products">
+
+<!-- FOTO PRODUK BISA DIISI SENDIRI -->
+<div class="card">
+<img src="ISI_FOTO_SENDIRI1.jpg">
+<h3>Jersey Home</h3>
+<p>Rp199.000</p>
+<select id="size1">
+<option value="S">S</option>
+<option value="M">M</option>
+<option value="L">L</option>
+<option value="XL">XL</option>
+</select>
+<button onclick="addToCart('Jersey Home',199000,'size1')">Tambah</button>
+</div>
+
+<div class="card">
+<img src="ISI_FOTO_SENDIRI2.jpg">
+<h3>Hoodie Ultras</h3>
+<p>Rp249.000</p>
+<select id="size2">
+<option value="S">S</option>
+<option value="M">M</option>
+<option value="L">L</option>
+<option value="XL">XL</option>
+</select>
+<button onclick="addToCart('Hoodie Ultras',249000,'size2')">Tambah</button>
+</div>
+
+<!-- FOTO KENANGAN-DOANG -->
+<div class="card">
+<img src="ISI_FOTO_KENANGAN1.jpg">
+<h3>Foto Kenangan Tribun</h3>
+<p>Hanya Pajangan</p>
+</div>
+
+<div class="card">
+<img src="ISI_FOTO_KENANGAN2.jpg">
+<h3>Foto Ultras</h3>
+<p>Hanya Pajangan</p>
+</div>
+
+</section>
+
+<div id="cart">
+<h3>Keranjang</h3>
+<div id="cart-items"></div>
+<hr>
+<h3>Checkout</h3>
+<input type="text" id="nama" placeholder="Nama Lengkap">
+<textarea id="alamat" placeholder="Alamat Lengkap"></textarea>
+<button onclick="checkout()">Kirim Pesanan</button>
+</div>
+
+<audio id="chant" src="https://www.myinstants.com/media/sounds/crowd-cheer.mp3" autoplay></audio>
+
+<script>
+let cart=[];
+
+// particle api
+function createParticle(){
+let particle=document.createElement('div');
+particle.classList.add('particle');
+particle.style.left=Math.random()*window.innerWidth+'px';
+particle.style.top=(window.innerHeight-50)+'px';
+document.body.appendChild(particle);
+setTimeout(()=>{particle.remove();},2000);
+}
+setInterval(createParticle,150);
+
+// cart functions
+function addToCart(nama,harga,sizeId){
+let size=document.getElementById(sizeId).value;
+cart.push({nama,harga,size});
+updateCart();
+document.getElementById("chant").play();
+}
+function updateCart(){
+let list="";let total=0;
+cart.forEach((item)=>{list+=`<p>${item.nama} (${item.size}) - Rp${item.harga}</p>`;total+=item.harga;});
+document.getElementById("cart-items").innerHTML=list+"<hr>Total: Rp"+total;
+document.getElementById("cart-count").innerText=cart.length;
+}
+function toggleCart(){document.getElementById("cart").classList.toggle("active");}
+function toggleMode(){document.body.classList.toggle("light");}
+function checkout(){
+let nama=document.getElementById("nama").value;
+let alamat=document.getElementById("alamat").value;
+if(nama==""||alamat==""){alert("Nama dan Alamat wajib diisi!");return;}
+alert("Pesanan berhasil!\nTerima kasih "+nama);
+cart=[];updateCart();
+}
+</script>
+
+</body>
+</html>

